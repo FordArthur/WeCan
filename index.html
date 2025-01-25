@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA-Style Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #0d0d16, #14141c);
+            color: white;
+        }
+
+        header {
+            background-color: #0d0d16;
+            padding: 1em 2em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 2em;
+        }
+
+        .hero {
+            position: relative;
+            text-align: center;
+            margin-bottom: 2em;
+        }
+
+        .hero img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        .hero h2 {
+            font-size: 50px;
+            position: absolute;
+            bottom: 0%;
+            left: 0%;
+            color: white;
+            padding: 0.5em 1em;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1em;
+        }
+
+        .card {
+            background-color: #15121c;
+            border-radius: 8px;
+            padding: 1em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .card p {
+            margin-bottom: 2em;
+        }
+
+        .card a {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: #61dafb;
+            text-decoration: none;
+        }
+
+        .card a:hover {
+            text-decoration: underline;
+        }
+
+        .text-section {
+            margin-top: 2em;
+            padding: 1.5em;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .text-section img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 1em;
+            border-radius: 8px;
+        }
+
+        .text-section h2 {
+            margin-top: 0;
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://cdn.discordapp.com/attachments/736298436885872731/1332670687516688495/cnne-212344-monkey-selfie.png?ex=679619cb&is=6794c84b&hm=25f52fffc6f7e3181274b732f65c62308c73c8f2970769b4e0435f6455588e0c&" alt="NASA Logo">
+            <h1>Solaris</h1>
+        </div>
+        <nav>
+            <a href="#about">About</a>
+            <a href="#missions">Misiones</a>
+            <a href="#contact">Contacto</a>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="NASA Space Image">
+            <h2>Eslogan aqui</h2>
+        </section>
+
+        <section class="content">
+            <div class="card">
+                <h3>Segunda semana de proyecto</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <a href="#">Ver más</a>
+            </div>
+            <div class="card">
+                <h3>Marcelo es negro, merecemos un premio</h3>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <a href="#">Ver más</a>
+            </div>
+            <div class="card">
+                <h3>Más cosas</h3>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                <a href="#">Ver más</a>
+            </div>
+        </section>
+
+        <section class="text-section">
+            <h2>Algo</h2>
+            <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Tristique penatibus enim suspendisse felis quis efficitur per primis. Efficitur porttitor maecenas libero dui aenean potenti commodo. Cras viverra lacinia dignissim nam orci. Nec aliquam id vehicula cras placerat accumsan. Ultricies taciti facilisi magnis egestas sodales dis quam. Facilisis eros proin dapibus per odio. Vestibulum suscipit scelerisque libero faucibus ut dis? Hendrerit metus finibus, duis adipiscing dui hendrerit.
+            </p>
+        </section>
+    </main>
+
+</body>
+</html>
