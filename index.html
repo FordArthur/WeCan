@@ -173,8 +173,6 @@
         }
 
         .text-section img {
-            max-width: 100%;
-            height: auto;
             margin-top: 1em;
             border-radius: 8px;
         }
@@ -263,14 +261,35 @@
             <h2 id="El CanSat">El CanSat</h2>
             <h3 id="Misiones">Misiones</h3>
             <p>
-              Nuestra misión principal con el CanSat es diseñar un sistema capaz de retransmitir datos de manera resiliente a errores y fallos de conexión. 
+              Nuestra misión principal con el CanSat es diseñar un sistema capaz de retransmitir datos de manera resiliente a errores y fallos de conexión. Por tanto, esta misión es compatible con la misión principal del CanSat dado que, en principio, somos agnosticos en cuanto a que datos sean recogidos. No
+              obstante, si tenemos ciertas ideas de que datos son propios para monitorizar, a saber: temperatura y presión (misión primaria CanSat) y concentración de algún gas de efecto invernadero (misión secundaria).
             </p>
             <h3 id="Diseño">El diseño</h3>
+            <h4>Carcasa</h4>
             <p>
-            Para diseñar nuestro cansat hemos hemos hecho varios bocetos y pruebas buscando la mayor facilidad de desmontaje y la mejor forma de distribución de los componentes, así hemos concluido que un cilindro dividido a la mitad y seccionado por tres bandejas, donde encajar los diferentes componentes con los que trabajamos, como la Arduino uno o los diferentes sensores de temperatura y presión, consiguiendo la mejor sujeción para los componentes y la mayor facilidad de montaje.
+            Para diseñar nuestro CanSat hemos hecho varios bocetos y pruebas buscando la mayor facilidad de desmontaje y la mejor forma de distribución de los componentes, así hemos concluido que un cilindro dividido a la mitad y seccionado por tres bandejas, donde encajar los diferentes componentes con los que trabajamos, como la Arduino uno o los diferentes sensores de temperatura y presión, consiguiendo la mejor sujeción para los componentes y la mayor facilidad de montaje. Ya que este diseño esta impreso en 3D, la complejidad del diseño, si se es inteligente, no es un problema.
             </p>
             <p>
             A la hora de realizar las prácticas del paracaídas concluimos con que la base superior debería tener 8 huecos para que las cuerdas no se enredarán y quedará un resultado más limpio y fácil de preparar, y darle un grosor de aproximadamente unos 7 milímetros a la base inferior para que el impacto lo aguante sin ninguna dificultad.
+            </p>
+            <p> 
+              Queda bien reflejada la idea del diseño en el boceto:
+            </p>
+            <img src="images/boceto.jpg" height="900" alt="Boceto">
+            <h4>Paracaídas</h4>
+            <p>
+              El primer concepto del paracaidas fue construido siguiendo los cálculos hechos en clase. Vemos la calidad del resultado en las pruebas:
+            </p>
+            <video width="1280" height="720" controls>
+              <source src="images/primera_prueba.mp4" type="video/mp4">
+              Incompatible
+            </video> 
+            <video width="1280" height="720" controls>
+              <source src="images/segunda_prueba.mp4" type="video/mp4">
+              Incompatible
+            </video> 
+            <p>
+              Vemos que el paracaídas fue capaz de realentizar el CanSat a la velocidad esperada de ~8 m/s (ya que el edificio del que fue lanzado es de ~15m de altura). De este experimento concluimos hacer un agujero per cuerda a la tapa del CanSat.
             </p>
             <h3 id="Programación">La programación</h3>
             <p>
