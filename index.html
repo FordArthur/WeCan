@@ -6,6 +6,9 @@
     <title>Solaris</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0px;
@@ -204,62 +207,88 @@
             <img src="images/solaris.png" alt="Logo">
         </div>
         <nav>
-            <a href="https://github.com/FordArthur/solaris">About</a>
-            <a href="misiones.html">Misiones</a>
-            <a href="#Por hacer">Contacto</a>
+            <a href="#About">About</a>
+            <a href="#Misiones">Misiones</a>
+            <a href="#Contacto">Contacto</a>
         </nav>
     </header>
     
     <main>
         <section class="hero">
-            <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="NASA Space Image">
-            <h2>Eslogan aqui</h2>
-        </section>
+            <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="Solaris">
+          <h2>Per aspera ad astra</h2>
+      </section>
 
         <section class="content">
             <div class="card">
-                <h3>Segunda semana de proyecto</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <a href="#">Ver más</a>
+                <h3>Pruebas del paracaídas</h3>
+                <p>El paracaídas, siendo una parte fundamental del CanSat, necesita pruebas y experimentación para veríficar que funciona.</p>
+                <a href="#Diseño">Ver más</a>
             </div>
             <div class="card">
                 <h3>Fases del diseño</h3>
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <a href="#">Ver más</a>
+                <p>Es crucial tener un buen diseño si se quiere llevar a cabo las misiones de manera exitosa.</p>
+                <a href="#Diseño">Ver más</a>
             </div>
             <div class="card">
-                <h3>Más cosas</h3>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                <a href="#">Ver más</a>
+                <h3>Programación del CanSat</h3>
+                <p>En sistemas reales, la programación es un aspecto clave. No por ser un sistema más pequeño esto es diferente.</p>
+                <a href="#Programación">Ver más</a>
             </div>
         </section>
 
         <div class="timeline">
             <div class="timeline-item">
-                <span>16 Ene 2025</span>
+                <span>Primera semana</span>
             </div>
             <div class="timeline-item">
-                <span>23 Ene 2025</span>
+                <span>Segunda semana</span>
             </div>
             <div class="timeline-item">
-                <span>30 Ene 2025</span>
+                <span>Semana de pre-prevaluación</span>
             </div>
             <div class="timeline-item">
-                <span>6 Feb 2025</span>
+                <span>Cuarta semana</span>
             </div>
             <div class="timeline-item">
-                <span>11 Feb 2025</span>
+                <span>Semana de prevaluación</span>
             </div>
         </div>
 
         <section class="text-section">
-            <h2>Algo</h2>
+            <h2 id="About">Sobre el proyecto</h2>
             <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            Tristique penatibus enim suspendisse felis quis efficitur per primis. Efficitur porttitor maecenas libero dui aenean potenti commodo. Cras viverra lacinia dignissim nam orci. Nec aliquam id vehicula cras placerat accumsan. Ultricies taciti facilisi magnis egestas sodales dis quam. Facilisis eros proin dapibus per odio. Vestibulum suscipit scelerisque libero faucibus ut dis? Hendrerit metus finibus, duis adipiscing dui hendrerit.
+              Fuimos introducidos a este proyecto el primer día de este curso. Mucho del temario dado fue estructurado pensando en el proyecto CanSat: Cálculos con sistemas eléctricos, prácticas de modelaje, teoría y práctica de programación, y experimentación con el material a ser utilizado son algunos ejemplos de temario y prácticas realizadas con este objetivo.
             </p>
-            
-            <img style="float: right;" src="https://cdn.discordapp.com/attachments/736298436885872731/1332670687516688495/cnne-212344-monkey-selfie.png?ex=679619cb&is=6794c84b&hm=25f52fffc6f7e3181274b732f65c62308c73c8f2970769b4e0435f6455588e0c&" alt="Monillo">
+            <h2 id="El CanSat">El CanSat</h2>
+            <h3 id="Misiones">Misiones</h3>
+            <p>
+              Nuestra misión principal con el CanSat es diseñar un sistema capaz de retransmitir datos de manera resiliente a errores y fallos de conexión. 
+            </p>
+            <h3 id="Diseño">El diseño</h3>
+            <p>
+            Para diseñar nuestro cansat hemos hemos hecho varios bocetos y pruebas buscando la mayor facilidad de desmontaje y la mejor forma de distribución de los componentes, así hemos concluido que un cilindro dividido a la mitad y seccionado por tres bandejas, donde encajar los diferentes componentes con los que trabajamos, como la Arduino uno o los diferentes sensores de temperatura y presión, consiguiendo la mejor sujeción para los componentes y la mayor facilidad de montaje.
+            </p>
+            <p>
+            A la hora de realizar las prácticas del paracaídas concluimos con que la base superior debería tener 8 huecos para que las cuerdas no se enredarán y quedará un resultado más limpio y fácil de preparar, y darle un grosor de aproximadamente unos 7 milímetros a la base inferior para que el impacto lo aguante sin ninguna dificultad.
+            </p>
+            <h3 id="Programación">La programación</h3>
+            <p>
+              Inicialmente, estabamos pensando hacer la programación en un lenguaje con tipos dependientes (Agda, Coq, Idris...), ya que en estos lenguajes se puede interpretar sus tipos como proposiciones. Para nuestro proyecto esto significaría ser capaces de verificar formalmente todo el código que escribimos. No obstante, por restriciones de tiempo (aunque todavía sigue en pie esta posibilidad), nos decantamos por Arduino.
+            </p>
+            <p>
+              Nuestro sistema de transmisión de datos se puede resumir en un protocolo que combina Selective Repeat ARQ, Foward Error Correction, además de ser un protocolo de "ventana deslizante" (Ergo, si se le quisiera dar un nombre, sería ISRP-FEC, "Index-Synchronized Selective Repeat Protocol with Forward Error Correction"). 
+              El protocolo es el siguiente:
+            </p>
+            <p>
+              Tenemos dos agentes, que llamaremos "satélite" y "base". Excepto por los códigos de confirmación a ser introducidos, satélite es "write-only" y base "read-only". El protocolo comienza con satélite mandando un código de 16 bits (realmente lo importante de este número es que sea capaz de representar todos los índices que se puedan tener al almacenamiento del satélite)
+              indicando el número de datos procesados (en nuestro caso, captados por los sensores). Base entonces responde con el número de datos leídos. Finalmente, satélite mandará, códificados en algún sistema de correción de errores (en nuestro caso, Hamming), los datos no leídos por la base.
+              Nótese como este sistema es altamente resiliente a la falta de conexión, ya que no hace falta ni siquiera (por un tiempo aceptable de tiempo) que el código sea recibido, que los datos sean leídos, o que los datos sean retransmitidos para que el protocolo funcione.
+            </p>
+            <p>
+              Este protocolo, además, nos permite funcionar de manera asíncrona, lo que nos permite transmitir datos de manera segura a una frecuencia mucho más alta que 1 segundo. Sin embargo, sufríriamos problemas cuando quisieramos representar estos datos en una gráfica dado que entonces la secuencia 
+              de datos entonces no representa ningun intervalo de tiempo regular. Para arreglar esto, se puede adjuntar el tiempo elapsado a la estructura a ser mandada por el protocolo, y el único inconveniente de esto sería menor almacenamiento en el satélite.
+            </p>
         </section>
     </main>
 
