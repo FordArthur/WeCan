@@ -56,24 +56,36 @@
         }
 
         .hero {
-            position: relative;
-            text-align: center;
-            margin-bottom: 2em;
+          position: relative;
+          text-align: center;
+          margin-bottom: 2em;
+          overflow: hidden;
+          height: 400px; /* Adjust based on your image height */
         }
 
         .hero img {
-            width: 100%;
-            max-height: 400px;
-            object-fit: cover;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0;
+          transition: opacity 1.5s ease-in-out;
+        }
+
+        .hero img.active {
+          opacity: 1;
         }
 
         .hero h2 {
-            font-size: 50px;
-            position: absolute;
-            bottom: 0%;
-            left: 0%;
-            color: white;
-            padding: 0.5em 1em;
+          font-size: 50px;
+          position: absolute;
+          bottom: 0%;
+          left: 0%;
+          color: white;
+          padding: 0.5em 1em;
+          z-index: 2;
         }
 
         .content {
@@ -182,21 +194,32 @@
         }
     </style>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const startDate = new Date("2025-01-16");
-            const endDate = new Date("2025-02-11");
-            const today = new Date();
+      document.addEventListener("DOMContentLoaded", function () {
+        const startDate = new Date("2025-01-16");
+        const endDate = new Date("2025-02-11");
+        const today = new Date();
 
-            const totalDuration = endDate - startDate;
-            const elapsedDuration = Math.min(today - startDate, totalDuration);
-            const progressWidth = (elapsedDuration / totalDuration) * 100;
+        const totalDuration = endDate - startDate;
+        const elapsedDuration = Math.min(today - startDate, totalDuration);
+        const progressWidth = (elapsedDuration / totalDuration) * 100;
 
-            const progress = document.createElement("div");
-            progress.className = "timeline-progress";
-            progress.style.width = `${progressWidth}%`;
+        const progress = document.createElement("div");
+        progress.className = "timeline-progress";
+        progress.style.width = `${progressWidth}%`;
 
-            document.querySelector(".timeline").appendChild(progress);
-        });
+        document.querySelector(".timeline").appendChild(progress);
+
+        const images = document.querySelectorAll('.hero img');
+        let currentIndex = 0;
+
+        function changeImage() {
+          images[currentIndex].classList.remove('active');
+          currentIndex = (currentIndex + 1) % images.length;
+          images[currentIndex].classList.add('active');
+        }
+
+        setInterval(changeImage, 5000); // Change image every 5 seconds
+      });
     </script>
 </head>
 <body>
@@ -212,9 +235,11 @@
     </header>
     
     <main>
-        <section class="hero">
-            <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="Solaris">
-          <h2>Per aspera ad astra</h2>
+      <section class="hero">
+        <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="Solaris" class="active">
+        <img src="https://cdn.discordapp.com/attachments/736298436885872731/1332668895252709396/A_CanSat_descending_pillars.png?ex=67a935e0&is=67a7e460&hm=ff6aab48389aa9cdac68a160b56dfbdef4514638e5511dd9f737d6888815e094&" alt="Solaris">
+        <img src="https://cdn.discordapp.com/attachments/736298436885872731/1338111174880788543/images.png?ex=67a9e4a4&is=67a89324&hm=260fdf6077e033ca2826ba0ccb288dc68ffccf68956b471d2d72c293203a8ebd&" alt="Solaris">
+        <h2>Per aspera ad astra</h2>
       </section>
 
         <section class="content">
@@ -256,7 +281,8 @@
         <section class="text-section">
             <h2 id="About">Sobre el proyecto</h2>
             <p>
-              Fuimos introducidos a este proyecto el primer día de este curso. Mucho del temario dado fue estructurado pensando en el proyecto CanSat: Cálculos con sistemas eléctricos, prácticas de modelaje, teoría y práctica de programación, y experimentación con el material a ser utilizado son algunos ejemplos de temario y prácticas realizadas con este objetivo.
+              Fuimos introducidos a este proyecto el primer día de este curso. Mucho del temario dado fue estructurado pensando en el proyecto CanSat: Cálculos con sistemas eléctricos, prácticas de modelaje, teoría y práctica de programación, y experimentación con el material a ser utilizado son algunos
+              ejemplos de temario y prácticas realizadas con este objetivo.
             </p>
             <h2 id="El CanSat">El CanSat</h2>
             <h3 id="Misiones">Misiones</h3>
@@ -273,9 +299,9 @@
             A la hora de realizar las prácticas del paracaídas concluimos con que la base superior debería tener 8 huecos para que las cuerdas no se enredarán y quedará un resultado más limpio y fácil de preparar, y darle un grosor de aproximadamente unos 7 milímetros a la base inferior para que el impacto lo aguante sin ninguna dificultad.
             </p>
             <p> 
-              Queda bien reflejada la idea del diseño en el boceto:
+              Queda bien reflejada la idea del diseño en el croquis:
             </p>
-            <img src="images/boceto.jpg" height="900" alt="Boceto">
+            <img src="images/croquis.jpg" height="900" alt="Croquis">
             <h4 id="Paracaídas">Paracaídas</h4>
             <p>
               El primer concepto del paracaidas fue construido siguiendo los cálculos hechos en clase. Vemos la calidad del resultado en las pruebas:
@@ -306,7 +332,8 @@
             </p>
             <p>
               Este protocolo, además, nos permite funcionar de manera asíncrona, lo que nos permite transmitir datos de manera segura a una frecuencia mucho más alta que 1 segundo. Sin embargo, sufríriamos problemas cuando quisieramos representar estos datos en una gráfica dado que entonces la secuencia 
-              de datos entonces no representa ningun intervalo de tiempo regular. Para arreglar esto, se puede adjuntar el tiempo elapsado a la estructura a ser mandada por el protocolo, y el único inconveniente de esto sería menor almacenamiento en el satélite.
+              de datos entonces no representa ningun intervalo de tiempo regular. Para arreglar esto, se puede adjuntar el tiempo elapsado a la estructura a ser mandada por el protocolo, y el único inconveniente de esto sería menor almacenamiento en el satélite. El código para este protocolo esta disponible
+              en el <a href="https://github.com/FordArthur/solaris/tree/main/code">GitHub</a> de esta misma página.
             </p>
         </section>
     </main>

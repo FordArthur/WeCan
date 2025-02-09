@@ -1,3 +1,16 @@
+/** Solaris:
+ * Descripción: Protocolo ISRP-FEC, satélite
+ * Autor: Marcos Ávila Navas
+ * Version 0.0.1 
+ *         | | +-- Avances
+ *         | +---- Cambios al diseño
+ *         +------ Cambios al protocolo
+ * 
+ * Notas:
+ * - La notación "IO ..." informa que tal función opera con input/output,
+ *   el argumento dado a "IO" es lo que devuelve (o "()" si no devuelve nada)
+ */
+
 #define TIMEOUT 100
 #define MEM (2000 / sizeof(Chunk))
 #define ERR -1
@@ -5,13 +18,15 @@
 typedef uint16_t Handshake;
 
 typedef struct Chunk {
+  uint16_t time;
   uint16_t temp;
   uint16_t pres;
+  uint16_t monox;
 } Chunk;
 
 static Chunk circular_buffer[MEM];
 
-/** send_handshake : Code -> IO ()
+/** send_handshake : Handshake -> IO ()
  * manda el correspondiente handshake
  */
 static inline
@@ -24,7 +39,7 @@ void send_handshake(const Handshake code) {
  * si se rechaza el handshake devuelve ERR
  */
 static inline
-uint16_t get_handshake(uint16_t timeout) {
+Handshake get_handshake(uint16_t timeout) {
   // TODO
 }
 
@@ -59,9 +74,9 @@ void loop() {
   send_handshake(++write);
 
   if ((send = get_handshake(TIMEOUT)) != ERR) {
-    // tambien sería conveniente poner un timeout aquí, por si acaso
     for (; send < write; ++send) {
       send_chunk(circular_buffer[send % MEM]);
     }
   }
+  // nótese como se hace de manera asíncrona
 }
