@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solaris</title>
+    <title>WeCan</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html {
@@ -11,34 +11,29 @@
         }
         body {
             font-family: 'Roboto', sans-serif;
-            margin: 0px;
-            padding: 0px;
+            margin: 0;
+            padding: 0;
             background: linear-gradient(to bottom, #0d0d16, #14141c);
             color: white;
         }
 
         header {
             background-color: #0d0d16;
-            padding: 1em 2em;
+            padding: 1em;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        header .logo {
-            display: flex;
-            align-items: center;
-        }
-
         header .logo img {
-          height: 110px;
-          width: 130px;
-          margin-right: 10px;
+            height: 80px;
+            width: auto;
         }
 
         header nav {
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         header nav a {
@@ -51,48 +46,34 @@
             text-decoration: underline;
         }
 
-        main {
-            padding: 2em;
-        }
-
         .hero {
-          position: relative;
-          text-align: center;
-          margin-bottom: 2em;
-          overflow: hidden;
-          height: 400px;
+            position: relative;
+            text-align: center;
+            margin-bottom: 1em;
+            overflow: hidden;
+            height: 300px;
         }
 
         .hero img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          opacity: 0;
-          transition: opacity 1.5s ease-in-out;
-        }
-
-        .hero img.active {
-          opacity: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .hero h2 {
-          font-size: 50px;
-          position: absolute;
-          bottom: 0%;
-          left: 0%;
-          color: white;
-          padding: 0.5em 1em;
-          z-index: 2;
+            font-size: 32px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 0.5em 1em;
+            background: rgba(0, 0, 0, 0.0);
         }
 
         .content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr;
             gap: 1em;
-            padding: 0 20em;
+            padding: 1em;
         }
 
         .card {
@@ -100,132 +81,40 @@
             border-radius: 8px;
             padding: 1em;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card h3 {
-            margin-top: 0;
-        }
-
-        .card p {
-            margin-bottom: 2em;
-        }
-
-        .card a {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            color: #61dafb;
-            text-decoration: none;
-        }
-
-        .card a:hover {
-            text-decoration: underline;
         }
 
         .timeline {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 2em 20em;
+            margin: 1em;
             position: relative;
-        }
-
-        .timeline::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: #555;
-            z-index: 1;
-            transform: translateY(-50%);
-            width: 100%;
-        }
-
-        .timeline-progress {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(to right, blue, purple);
-            z-index: 2;
-            transform: translateY(-50%);
-        }
-
-        .timeline-item {
-            position: relative;
-            z-index: 3;
-            background: #15121c;
-            border: 2px solid #61dafb;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .timeline-item span {
-            position: absolute;
-            top: 30px;
-            color: white;
-            font-size: 14px;
-            text-align: center;
-            white-space: nowrap;
+            background: #222;
+            padding: 1em;
+            border-radius: 8px;
         }
 
         .text-section {
-            margin-top: 2em;
-            padding: 0 20em;
-            border-radius: 8px;
+            padding: 1em;
             line-height: 1.6;
         }
 
-        .text-section img {
-            margin-top: 1em;
-            border-radius: 8px;
-        }
+        @media (min-width: 768px) {
+            .content {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
 
-        .text-section h2 {
-            margin-top: 0;
+            .timeline {
+                margin: 2em 10%;
+            }
+
+            .hero h2 {
+                font-size: 50px;
+            }
         }
     </style>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const startDate = new Date("2025-01-16");
-        const endDate = new Date("2025-02-11");
-        const today = new Date();
-
-        const totalDuration = endDate - startDate;
-        const elapsedDuration = Math.min(today - startDate, totalDuration);
-        const progressWidth = (elapsedDuration / totalDuration) * 100;
-
-        const progress = document.createElement("div");
-        progress.className = "timeline-progress";
-        progress.style.width = `${progressWidth}%`;
-
-        document.querySelector(".timeline").appendChild(progress);
-
-        const images = document.querySelectorAll('.hero img');
-        let currentIndex = 0;
-
-        function changeImage() {
-          images[currentIndex].classList.remove('active');
-          currentIndex = (currentIndex + 1) % images.length;
-          images[currentIndex].classList.add('active');
-        }
-
-        setInterval(changeImage, 5000);
-      });
-    </script>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="images/solaris.png" alt="Logo">
+            <img src="images/we_can.png" alt="Logo">
         </div>
         <nav>
             <a href="#About">About</a>
@@ -233,110 +122,29 @@
             <a href="#Contacto">Contacto</a>
         </nav>
     </header>
-    
     <main>
-      <section class="hero">
-        <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="Solaris" class="active">
-        <img src="https://cdn.discordapp.com/attachments/736298436885872731/1332668895252709396/A_CanSat_descending_pillars.png?ex=67a935e0&is=67a7e460&hm=ff6aab48389aa9cdac68a160b56dfbdef4514638e5511dd9f737d6888815e094&" alt="Solaris">
-        <img src="https://cdn.discordapp.com/attachments/736298436885872731/1338111174880788543/images.png?ex=67a9e4a4&is=67a89324&hm=260fdf6077e033ca2826ba0ccb288dc68ffccf68956b471d2d72c293203a8ebd&" alt="Solaris">
-        <h2>Per aspera ad astra</h2>
-      </section>
-
+        <section class="hero">
+            <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="WeCan">
+            <h2>Per aspera ad astra</h2>
+        </section>
         <section class="content">
             <div class="card">
                 <h3>Pruebas del paracaídas</h3>
-                <p>El paracaídas, siendo una parte fundamental del CanSat, necesita pruebas y experimentación para veríficar que funciona.</p>
-                <a href="#Paracaídas">Ver más</a>
+                <p>El paracaídas, siendo una parte fundamental del CanSat, necesita pruebas y experimentación para verificar que funciona.</p>
             </div>
             <div class="card">
                 <h3>Fases del diseño</h3>
                 <p>Es crucial tener un buen diseño si se quiere llevar a cabo las misiones de manera exitosa.</p>
-                <a href="#Diseño">Ver más</a>
             </div>
             <div class="card">
                 <h3>Programación del CanSat</h3>
                 <p>En sistemas reales, la programación es un aspecto clave. No por ser un sistema más pequeño esto es diferente.</p>
-                <a href="#Programación">Ver más</a>
             </div>
         </section>
-
-        <div class="timeline">
-            <div class="timeline-item">
-                <span>Primera semana</span>
-            </div>
-            <div class="timeline-item">
-                <span>Segunda semana</span>
-            </div>
-            <div class="timeline-item">
-                <span>Semana de pre-prevaluación</span>
-            </div>
-            <div class="timeline-item">
-                <span>Cuarta semana</span>
-            </div>
-            <div class="timeline-item">
-                <span>Semana de prevaluación</span>
-            </div>
-        </div>
-
         <section class="text-section">
             <h2 id="About">Sobre el proyecto</h2>
-            <p>
-              Fuimos introducidos a este proyecto el primer día de este curso. Mucho del temario dado fue estructurado pensando en el proyecto CanSat: Cálculos con sistemas eléctricos, prácticas de modelaje, teoría y práctica de programación, y experimentación con el material a ser utilizado son algunos
-              ejemplos de temario y prácticas realizadas con este objetivo.
-            </p>
-            <h2 id="El CanSat">El CanSat</h2>
-            <h3 id="Misiones">Misiones</h3>
-            <p>
-              Nuestra misión principal con el CanSat es diseñar un sistema capaz de retransmitir datos de manera resiliente a errores y fallos de conexión. Por tanto, esta misión es compatible con la misión principal del CanSat dado que, en principio, somos agnosticos en cuanto a que datos sean recogidos. No
-              obstante, si tenemos ciertas ideas de que datos son propios para monitorizar, a saber: temperatura y presión (misión primaria CanSat) y concentración de algún gas de efecto invernadero (misión secundaria).
-            </p>
-            <h3 id="Diseño">El diseño</h3>
-            <h4>Carcasa</h4>
-            <p>
-            Para diseñar nuestro CanSat hemos hecho varios bocetos y pruebas buscando la mayor facilidad de desmontaje y la mejor forma de distribución de los componentes, así hemos concluido que un cilindro dividido a la mitad y seccionado por tres bandejas, donde encajar los diferentes componentes con los que trabajamos, como la Arduino uno o los diferentes sensores de temperatura y presión, consiguiendo la mejor sujeción para los componentes y la mayor facilidad de montaje. Ya que este diseño esta impreso en 3D, la complejidad del diseño, si se es inteligente, no es un problema.
-            </p>
-            <p>
-            A la hora de realizar las prácticas del paracaídas concluimos con que la base superior debería tener 8 huecos para que las cuerdas no se enredarán y quedará un resultado más limpio y fácil de preparar, y darle un grosor de aproximadamente unos 7 milímetros a la base inferior para que el impacto lo aguante sin ninguna dificultad.
-            </p>
-            <p> 
-              Queda bien reflejada la idea del diseño en el croquis:
-            </p>
-            <img src="images/croquis.jpg" height="900" alt="Croquis">
-            <h4 id="Paracaídas">Paracaídas</h4>
-            <p>
-              El primer concepto del paracaidas fue construido siguiendo los cálculos hechos en clase. Vemos la calidad del resultado en las pruebas:
-            </p>
-            <video width="1280" height="720" controls>
-              <source src="images/primera_prueba.mp4" type="video/mp4">
-              Incompatible
-            </video> 
-            <video width="1280" height="720" controls>
-              <source src="images/segunda_prueba.mp4" type="video/mp4">
-              Incompatible
-            </video> 
-            <p>
-              Vemos que el paracaídas fue capaz de realentizar el CanSat a la velocidad esperada de ~8 m/s (ya que el edificio del que fue lanzado es de ~15m de altura). De este experimento concluimos hacer un agujero per cuerda a la tapa del CanSat.
-            </p>
-            <h3 id="Programación">La programación</h3>
-            <p>
-              Inicialmente, estabamos pensando hacer la programación en un lenguaje con tipos dependientes (Agda, Coq, Idris...), ya que en estos lenguajes se puede interpretar sus tipos como proposiciones. Para nuestro proyecto esto significaría ser capaces de verificar formalmente todo el código que escribimos. No obstante, por restriciones de tiempo (aunque todavía sigue en pie esta posibilidad), nos decantamos por Arduino.
-            </p>
-            <p>
-              Nuestro sistema de transmisión de datos se puede resumir en un protocolo que combina Selective Repeat ARQ, Foward Error Correction, además de ser un protocolo de "ventana deslizante" (Ergo, si se le quisiera dar un nombre, sería ISRP-FEC, "Index-Synchronized Selective Repeat Protocol with Forward Error Correction"). 
-              El protocolo es el siguiente:
-            </p>
-            <p>
-              Tenemos dos agentes, que llamaremos "satélite" y "base". Excepto por los códigos de confirmación a ser introducidos, satélite es "write-only" y base "read-only". El protocolo comienza con satélite mandando un código de 16 bits (realmente lo importante de este número es que sea capaz de representar todos los índices que se puedan tener al almacenamiento del satélite)
-              indicando el número de datos procesados (en nuestro caso, captados por los sensores). Base entonces responde con el número de datos leídos. Finalmente, satélite mandará, códificados en algún sistema de correción de errores (en nuestro caso, Hamming), los datos no leídos por la base.
-              Nótese como este sistema es altamente resiliente a la falta de conexión, ya que no hace falta ni siquiera (por un tiempo aceptable de tiempo) que el código sea recibido, que los datos sean leídos, o que los datos sean retransmitidos para que el protocolo funcione.
-            </p>
-            <p>
-              Este protocolo, además, nos permite funcionar de manera asíncrona, lo que nos permite transmitir datos de manera segura a una frecuencia mucho más alta que 1 segundo. Sin embargo, sufríriamos problemas cuando quisieramos representar estos datos en una gráfica dado que entonces la secuencia 
-              de datos entonces no representa ningun intervalo de tiempo regular. Para arreglar esto, se puede adjuntar el tiempo elapsado a la estructura a ser mandada por el protocolo, y el único inconveniente de esto sería menor almacenamiento en el satélite. El código para este protocolo esta disponible
-              en el <a href="https://github.com/FordArthur/solaris/tree/main/code">GitHub</a> de esta misma página.
-            </p>
+            <p>Fuimos introducidos a este proyecto el primer día de este curso. Mucho del temario dado fue estructurado pensando en el proyecto CanSat: cálculos con sistemas eléctricos, prácticas de modelaje, teoría y práctica de programación, y experimentación con el material a ser utilizado son algunos ejemplos de temario y prácticas realizadas con este objetivo.</p>
         </section>
     </main>
-
 </body>
 </html>

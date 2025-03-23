@@ -1,7 +1,7 @@
 /** Solaris:
  * Descripción: Receptor/transmisor de la base
  * Autor: Marcos Ávila Navas
- * Version 1.0.1
+ * Version 1.0.2
  *         | | +-- Avances
  *         | +---- Cambios al diseño
  *         +------ Cambios al protocolo
@@ -57,7 +57,7 @@ int set_interface_attribs (int fd, int speed, int parity) {
 
 typedef struct Reader {
   uint64_t chunk_size;
-  int serial_fd, file_fd;
+  const char *serial, *file;
 } Reader;
 
 pthread_mutex_t serial_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -69,19 +69,27 @@ void* reader(void* arg) {
         , read_s;
   char read_buf[read_buf_s];
 
-  memset(read_buf, '\0', read_buf_s);
+  int serial_fd = open(conf->serial, O_RDONLY | O_NOCTTY | O_SYNC);
+  if (serial_fd < 0) {
+    fprintf(stderr, "(Reader) error %d opening serial: %s\n", errno, strerror(errno));
+    return NULL;
+  }
+
+  int file_fd = open(conf->file, O_WRONLY | O_CREAT | O_APPEND);
+  if (serial_fd < 0) {
+    fprintf(stderr, "(Reader) error %d opening file: %s\n", errno, strerror(errno));
+    return NULL;
+  }
 
   while (1) {
     pthread_mutex_lock(&serial_lock);
-    if ((read_s = read(conf->serial_fd, read_buf, read_buf_s)) < 0) {
+    if ((read_s = read(serial_fd, read_buf, read_buf_s)) < 0) {
       fprintf(stderr, "(Reader) error %d reading from serial: %s\n", errno, strerror(errno));
-      return NULL;
     }
     pthread_mutex_unlock(&serial_lock);
 
-    if (write(conf->file_fd, read_buf, read_s) < 0) {
+    if (write(file_fd, read_buf, read_s) < 0) {
       fprintf(stderr, "(Reader) error %d writing to file: %s\n", errno, strerror(errno));
-      return NULL;
     }
   }
 }
@@ -92,14 +100,26 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  int serial_fd  = open(argv[1], O_RDWR | O_NOCTTY | O_SYNC);
+  pthread_t thread;
+  Reader conf = (Reader) {
+    .chunk_size = argc == 3? 16 : atoi(argv[3]),
+    .serial= argv[1],
+    .file = argv[2]
+  };
+
+  if (pthread_create(&thread, NULL, reader, &conf) < 0) {
+    fprintf(stderr, "error %d creating reader thread: %s\n", errno, strerror(errno));
+    return 1;
+  }
+
+  int serial_fd  = open(argv[1], O_WRONLY | O_NOCTTY | O_SYNC);
   if (serial_fd < 0) {
     fprintf(stderr, "error %d opening %s: %s\n", errno, argv[1], strerror(errno));
     return 1;
   }
-  // if (set_interface_attribs(serial_fd, B9600, 0) < 0) return 1;
+  if (set_interface_attribs(serial_fd, B9600, 0) < 0) return 1;
 
-  int file_fd = open(argv[2], O_RDWR | O_CREAT | O_APPEND, 0644);
+  int file_fd = open(argv[2], O_RDONLY | O_CREAT, 0644);
   if (serial_fd < 0) {
     fprintf(stderr, "error %d opening %s: %s\n", errno, argv[2], strerror(errno));
     return 1;
@@ -116,21 +136,10 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  pthread_t thread;
-  Reader conf = (Reader) {
-    .chunk_size = argc == 3? 16 : atoi(argv[2]),
-    .serial_fd = serial_fd,
-    .file_fd = file_fd
-  };
-
-  if (pthread_create(&thread, NULL, reader, &conf) < 0) {
-    fprintf(stderr, "error %d creating reader thread: %s\n", errno, strerror(errno));
-    return 1;
-  }
-
-  uint64_t read_s;
+  int64_t read_s;
   char read_buf[1024]
      , in;
+
   while (1) {
     if (read(STDIN_FILENO, &in, 1) > 0) switch (in) {
       case 'q':
@@ -144,7 +153,7 @@ int main(int argc, char *argv[]) {
         break;
       case 's':
         printf("> ");
-        for (read_s = 0; (in = getchar()) != '\n'; ++read_s) {
+        for (read_s = 0; (in = getchar()) != '\n' && read_s < 1023; ++read_s) {
           putchar(in);
           read_buf[read_s] = in;
         }
@@ -156,10 +165,13 @@ int main(int argc, char *argv[]) {
         pthread_mutex_unlock(&serial_lock);
         break;
       case 'l':
-        if ((read_s = read(file_fd, read_buf, 1024)) < 0) {
-          fprintf(stderr, "error %d reading capture: %s\n", errno, strerror(errno));
-        } else  {
+        lseek(file_fd, 0, SEEK_SET);
+        while ((read_s = read(file_fd, read_buf, 1024)) > 0) {
           write(STDOUT_FILENO, read_buf, read_s);
+        } putchar('\n');
+        fflush(stdout);
+        if (read_s < 0) {
+          fprintf(stderr, "error %d reading capture: %s\n", errno, strerror(errno));
         }
         break;
       case 'h':
@@ -171,6 +183,7 @@ int main(int argc, char *argv[]) {
           "|| q: cierra este programa    s: manda un mensaje por la antena    l: enseña los contenidos de la captura    ||\n"
           "|| c: limpia la pantalla      h: muestra este mensaje                                                        ||\n"
           "===============================================================================================================\n"
+          "\n"
         );
         break;
     }
