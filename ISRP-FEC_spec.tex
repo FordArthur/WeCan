@@ -1,0 +1,25 @@
+\documentclass{article}
+
+\begin{document}
+
+\section{Introducción}
+
+El protocolo ISRP-FEC (Index-Synchronized Selective Repeat Protocol with Forward Error Correction) es un protocolo diseñado para que un sistema ``\textit{satélite}'' sea capaz de operar por un margen de tiempo sin la conexión de un sistema ``\textit{base}'', sin ninguna perdida de datos. El corazón del protocolo se encuentra en la parte ``\textit{ISRP}'' del acrónimo, a ser explicada a continuación. ``\textit{FEC}'' simplemente significa que los mensajes son codificados con algún algoritmo de detección de errores. Para WeCan, hemos escogido un algoritmo simple (a saber, códigos Hamming). Sin embargo, podríamos haber usado cualquier otro, e inclusive podríamos no haber codificado los mensajes. Por tanto, el resto de este documento esta dedicado a explicar el funcionamiento de ``\textit{ISRP}''.
+
+\section{ISRP}
+
+\subsection{Participantes}
+
+Al ser un protocolo de comunicación, debemos primero describir los participantes en la comunicación. En nuestro caso, los participantes no son simétricos: El ``\textit{sender}'' y el ``\textit{reciever}'' no pueden ser intercambiados. Para lo que procede, este hecho no afecta, sin embargo, esto significa que las máquinas que implementen este protocolo no deben implementar una parte ``\textit{sender}'' y otra ``\textit{reciever}''. En su lugar, una de las máquinas siempre será llamada ``\textit{satélite}'' y la otra ``\textit{base}''.
+
+El rol de satélite será el de transmitir una secuencia ordenada de datos, sin duplicados ni (en la medida de lo posible) pérdidas. Para esto, necesitamos que satélite tenga algún tipo de memoria indexada. Base simplemente intenta recoger estos datos para cualquier uso que estos puedan tener.
+
+\subsection{Protocolo}
+
+Asumimos que base tendrá mejor conectividad y por tanto no será el mayor problema de la transmisión (aunque siempre tenemos en cuenta que puede perder conexión). Por tanto, el protocolo comienza con satélite retransmitiendo el índice por el que está escribiendo datos en su memoria. Este índice siempre deberá de ir creciendo durante la transmisión.
+
+Si el índice no es recibido, o es recibido pero la señal de respuesta no es captada, satélite deberá de seguir recopilando datos, aumentando su índice ``\textit{tope}'', y enviando este índice. De lo contrario, base habrá enviado un mensaje de respuesta conteniendo el indice del último dato recibido. Esta respuesta es utilizada para calcular cuantos datos todavía no se han retransmitido, para así poder enviarlos. Por cada dato que base reciba, esta debe aumentar su contador de datos recibidos, para así en el caso de haberse quedado ``a medias'' poder retomar la descarga de datos de manera exitosa.
+
+Los índices utilizados para calcular los datos a retransmitir se llaman ``\textit{handshakes}'', y dan lugar a la parte ``\textit{Index-Synchronized}'' del nombre. En una implementación de este protocolo, deben ser lo suficientemente grandes para no hacer \textit{overflow} durante la captura de datos.
+
+\end{document}
