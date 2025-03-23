@@ -1,1 +1,1 @@
-# Solaris
+# WeCan
