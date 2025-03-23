@@ -1,7 +1,7 @@
 /** Solaris:
  * Descripción: Código satélite
  * Autor: Marcos Ávila Navas
- * Version 0.0.2 
+ * Version 1.0.1
  *         | | +-- Avances
  *         | +---- Cambios al diseño
  *         +------ Cambios al protocolo
@@ -37,7 +37,7 @@ SoftwareSerial _antena(10, 11); // RX = 10, TX = 11
 #endif
 
 #define TIMEOUT 100 // Timeout del handshake en ms
-#define MEM 2000    // Memoria disponible en bytes del Arduio Nano
+#define MEM 110     // Memoria que reservamos para el buffer circular
 #define ERR -1      // Reservamos -1 como símbolo de error
 
 // Es CRUCIAL Handshake no tenga signo (para que el shift sea lógico y no aritmético)
@@ -83,7 +83,8 @@ Handshake get_handshake(long timeout) {
  */
 static inline
 Chunk encode(Chunk chunk) {
-
+  /* TODO: La implementación requiere más pruebas para ver donde sería óptimo recortar precisión en el chunk */
+  return chunk;
 }
 
 /** read_sensors : IO Chunk
@@ -102,10 +103,10 @@ Chunk read_sensors() {
  */
 static inline
 void send_float(const float x) {
-  TheSerial.write(x & 0xff);
-  TheSerial.write((x & 0xff00) >> 8);
-  TheSerial.write((x & 0xff0000) >> 16);
-  TheSerial.write((x & 0xff000000) >> 24);
+  TheSerial.write(*(const int*)(&x) & 0xff);
+  TheSerial.write((*(const int*)(&x) & 0xff00) >> 8);
+  TheSerial.write((*(const int*)(&x) & 0xff0000) >> 16);
+  TheSerial.write((*(const int*)(&x) & 0xff000000) >> 24);
 }
 
 /** send_chunk : IO ()

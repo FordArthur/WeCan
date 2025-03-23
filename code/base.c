@@ -1,7 +1,7 @@
 /** Solaris:
  * Descripción: Receptor/transmisor de la base
  * Autor: Marcos Ávila Navas
- * Version 0.1.0
+ * Version 1.0.1
  *         | | +-- Avances
  *         | +---- Cambios al diseño
  *         +------ Cambios al protocolo
@@ -97,9 +97,9 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "error %d opening %s: %s\n", errno, argv[1], strerror(errno));
     return 1;
   }
-  if (set_interface_attribs(serial_fd, B9600, 0) < 0) return 1;
+  // if (set_interface_attribs(serial_fd, B9600, 0) < 0) return 1;
 
-  int file_fd = open(argv[2], O_RDWR | O_CREAT | O_APPEND);
+  int file_fd = open(argv[2], O_RDWR | O_CREAT | O_APPEND, 0644);
   if (serial_fd < 0) {
     fprintf(stderr, "error %d opening %s: %s\n", errno, argv[2], strerror(errno));
     return 1;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 
   pthread_t thread;
   Reader conf = (Reader) {
-    .chunk_size = argc == 3? atoi(argv[3]) : 16,
+    .chunk_size = argc == 3? 16 : atoi(argv[2]),
     .serial_fd = serial_fd,
     .file_fd = file_fd
   };
@@ -140,11 +140,15 @@ int main(int argc, char *argv[]) {
         return 0;
       case 'c':
         printf("\033[H\033[J");
+        fflush(stdout);
         break;
       case 's':
+        printf("> ");
         for (read_s = 0; (in = getchar()) != '\n'; ++read_s) {
+          putchar(in);
           read_buf[read_s] = in;
         }
+        putchar('\n');
         pthread_mutex_lock(&serial_lock);
         if (write(serial_fd, read_buf, read_s) < 0) {
           fprintf(stderr, "error %d writting to serial: %s", errno, strerror(errno));
@@ -161,12 +165,12 @@ int main(int argc, char *argv[]) {
       case 'h':
       default:
         printf(
-          "==============================================================================================================="
-          "|| WeCan programa base: Controles                                                                            ||"
-          "||                                                                                                           ||"
-          "|| q: cierra este programa    s: manda un mensaje por la antena    l: enseña los contenidos de la captura    ||"
-          "|| c: limpia la pantalla      h: muestra este mensaje                                                        ||"
-          "==============================================================================================================="
+          "===============================================================================================================\n"
+          "|| WeCan programa base: Controles                                                                            ||\n"
+          "||                                                                                                           ||\n"
+          "|| q: cierra este programa    s: manda un mensaje por la antena    l: enseña los contenidos de la captura    ||\n"
+          "|| c: limpia la pantalla      h: muestra este mensaje                                                        ||\n"
+          "===============================================================================================================\n"
         );
         break;
     }
