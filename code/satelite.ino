@@ -11,30 +11,10 @@
  *   el argumento dado a "IO" es lo que devuelve (o "()" si no devuelve nada)
  */
 
-/* La siguiente secuencia permite elegir entre un programa en el que la antena
- * utilice el puerto serial predeterminado y uno configurado desde software
- */
-
 #include <Adafruit_BMP280.h>
+#include <SoftwareSerial.h>
 
-#undef SSerial // Cambiese entre #undef y #define
-
-#ifdef SSerial
-
-#include <Software_Serial.h>
-
-SoftwareSerial _antena(10, 11); // RX = 10, TX = 11
-
-/* Para ser agnosticos en cuanto a cual se eligió, definimos e utilizamos "TheSerial"
- * desde este punto para referirnos al serial del programa
- */
-#define TheSerial _antena
-
-#else
-
-#define TheSerial Serial // Misma idea
-
-#endif
+SoftwareSerial antena(10, 11); // RX = 10, TX = 11
 
 #define TIMEOUT 100 // Timeout del handshake en ms
 #define MEM 110     // Memoria que reservamos para el buffer circular
@@ -60,9 +40,9 @@ static Chunk circular_buffer[MEM];
 static inline
 void send_handshake(const Handshake code) {
   // Mandamos el primer byte ...
-  TheSerial.write(code & 0xff);
+  antena.write(code & 0xff);
   // ... y luego el segundo
-  TheSerial.write(code >> 8);
+  antena.write(code >> 8);
 }
 
 /** get_handshake : uint16_t -> IO Handshake
@@ -73,7 +53,7 @@ static inline
 Handshake get_handshake(long timeout) {
   Handshake handshake;
   for (; timeout; --timeout) 
-    if ((handshake = TheSerial.read()) != ERR)
+    if ((handshake = antena.read()) != ERR)
       return handshake;
   return ERR;
 }
@@ -103,10 +83,10 @@ Chunk read_sensors() {
  */
 static inline
 void send_float(const float x) {
-  TheSerial.write(*(const int*)(&x) & 0xff);
-  TheSerial.write((*(const int*)(&x) & 0xff00) >> 8);
-  TheSerial.write((*(const int*)(&x) & 0xff0000) >> 16);
-  TheSerial.write((*(const int*)(&x) & 0xff000000) >> 24);
+  antena.write(*(const int*)(&x) & 0xff);
+  antena.write((*(const int*)(&x) & 0xff00) >> 8);
+  antena.write((*(const int*)(&x) & 0xff0000) >> 16);
+  antena.write((*(const int*)(&x) & 0xff000000) >> 24);
 }
 
 /** send_chunk : IO ()
@@ -114,8 +94,8 @@ void send_float(const float x) {
  */
 static inline
 void send_chunk(const Chunk chunk) {
-  TheSerial.write(chunk.time & 0xff);
-  TheSerial.write(chunk.time >> 8);
+  antena.write(chunk.time & 0xff);
+  antena.write(chunk.time >> 8);
   send_float(chunk.temp);
   send_float(chunk.pres);
   send_float(chunk.monox);
@@ -125,7 +105,7 @@ Handshake write = 0;
 Handshake send;
 
 void setup() {
-  TheSerial.begin(9600);
+  antena.begin(9600);
   bmp.setSampling(
     Adafruit_BMP280::MODE_NORMAL,
     Adafruit_BMP280::SAMPLING_X2,
@@ -141,10 +121,7 @@ void loop() {
 
   send_handshake(++write);
 
-  if ((send = get_handshake(TIMEOUT)) != ERR) {
-    for (; send < write; ++send) {
+  if ((send = get_handshake(TIMEOUT)) != ERR)
+    for (; send < write; ++send)
       send_chunk(circular_buffer[send % MEM]);
-    }
-  }
-  // Nótese como se hace de manera asíncrona
 }
