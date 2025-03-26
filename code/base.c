@@ -7,6 +7,8 @@
  *         +------ Cambios al protocolo
  */
 
+#define DEBUG // Cambiar entre #define y #undef
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -75,7 +77,7 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Usage: %s [port] [file] [chunk_size?]\n", argv[0]);
     return 1;
   }
-  FILE* serial  = fopen(argv[1], "r");
+  FILE* serial  = fopen(argv[1], "rw");
   if (!serial) {
     fprintf(stderr, "error %d opening %s: %s\n", errno, argv[1], strerror(errno));
     return 1;
@@ -86,11 +88,12 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  set_interface_attribs(fileno(serial), B9600, 0);
+  if (set_interface_attribs(fileno(serial), B9600, 0) < 0)
+    return 1;
 
   long read_buf_s = argc == 3? 16 : atoi(argv[3])
      , read_s;
-  uint32_t recv = 0
+  uint16_t recv = 0
          , top;
   char read_buf[read_buf_s];
 
@@ -102,10 +105,8 @@ int main(int argc, char *argv[]) {
 
   fprintf(file, HEADER);
 
-  while (1) if (fread(&top, sizeof(uint32_t), 1, serial)) {
-    fwrite(&recv, sizeof(uint32_t), 1, serial);
-
+  while (1) if (fread(&top, sizeof(top), 1, serial)) {
+    fwrite(&recv, sizeof(recv), 1, serial);
     while (recv < top && report(serial, file)) recv++;
   }
-
 }
