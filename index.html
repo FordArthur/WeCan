@@ -1,152 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeCan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #0d0d16, #14141c);
-            color: white;
-        }
+    <title>WeSite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const targetDate = new Date("2025-04-02T00:00:00").getTime();
+        const phrases = {
+          6: ["Programando el satélite...", "Diseñando anuncios..."],
+          5: ["Comprobando sistemas...", "Difundiendo la misión..."],
+          4: ["Últimos cambios...", "Componiendo la presentación..."],
+          3: ["Repasando todo...", "Ensayando la presentación"],
+          2: ["Últimas pruebas...", "Coreografiando presentación..."],
+          1: ["Mañana..."]
+        };
+        const youtubeURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        
+        let today;
 
-        header {
-            background-color: #0d0d16;
-            padding: 1em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        function updateCountdown() {
+          const now = new Date().getTime();
+          const timeLeft = targetDate - now;
+          if (timeLeft <= 0) {
+            window.location.href = youtubeURL;
+            return;
+          }
 
-        header .logo img {
-            height: 80px;
-            width: auto;
-        }
+          const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-        header nav {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+          document.getElementById("countdown").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-        header nav a {
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-        }
+          if (today != days && days in phrases) {
+            const phraseSet = phrases[days];
+            document.getElementById("phrase").innerText = phraseSet[Math.floor(Math.random() * phraseSet.length)];
+          }
 
-        header nav a:hover {
-            text-decoration: underline;
+          if (!today) today = days;
         }
 
-        .hero {
-            position: relative;
-            text-align: center;
-            margin-bottom: 1em;
-            overflow: hidden;
-            height: 300px;
-        }
-
-        .hero img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .hero h2 {
-            font-size: 32px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 0.5em 1em;
-            background: rgba(0, 0, 0, 0.0);
-        }
-
-        .content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1em;
-            padding: 1em;
-        }
-
-        .card {
-            background-color: #15121c;
-            border-radius: 8px;
-            padding: 1em;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .timeline {
-            margin: 1em;
-            position: relative;
-            background: #222;
-            padding: 1em;
-            border-radius: 8px;
-        }
-
-        .text-section {
-            padding: 1em;
-            line-height: 1.6;
-        }
-
-        @media (min-width: 768px) {
-            .content {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
-
-            .timeline {
-                margin: 2em 10%;
-            }
-
-            .hero h2 {
-                font-size: 50px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="images/we_can.png" alt="Logo">
-        </div>
-        <nav>
-            <a href="#About">About</a>
-            <a href="#Misiones">Misiones</a>
-            <a href="https://www.instagram.com/cansat.wecan/">Contacto</a>
-        </nav>
-    </header>
-    <main>
-        <section class="hero">
-            <img src="https://edugalaxen.com/wp-content/uploads/2024/04/cansat24_16.jpg" alt="WeCan">
-            <h2>Per aspera ad astra</h2>
-        </section>
-        <section class="content">
-            <div class="card">
-                <h3>Pruebas del paracaídas</h3>
-                <p>El paracaídas, siendo una parte fundamental del CanSat, necesita pruebas y experimentación para verificar que funciona.</p>
-            </div>
-            <div class="card">
-                <h3>Fases del diseño</h3>
-                <p>Es crucial tener un buen diseño si se quiere llevar a cabo las misiones de manera exitosa.</p>
-            </div>
-            <div class="card">
-                <h3>Programación del CanSat</h3>
-                <p>En sistemas reales, la programación es un aspecto clave. No por ser un sistema más pequeño esto es diferente.</p>
-            </div>
-        </section>
-        <section class="text-section">
-            <h2 id="About">Sobre el proyecto</h2>
-            <p>
-              Fuimos introducidos a este proyecto el primer día de este curso. Mucho del temario dado fue estructurado pensando en el proyecto CanSat: cálculos con sistemas eléctricos, prácticas de modelaje, teoría y práctica de programación, y experimentación con el material a ser utilizado son algunos ejemplos de temario y prácticas realizadas con este objetivo.
-            </p>
-        </section>
-    </main>
-</body>
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+      });
+    </script>
+  </head>
+  <body class="flex items-center justify-center min-h-screen bg-gray-900 text-white text-center p-4">
+    <div>
+      <p id="countdown" class="text-6xl font-bold my-4"></p>
+      <p id="phrase" class="text-3xl italic"></p>
+    </div>
+  </body>
 </html>
