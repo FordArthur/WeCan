@@ -1,7 +1,7 @@
 /** Solaris:
  * Descripción: Código satélite
  * Autor: Marcos Ávila Navas
- * Version 2.0.1 
+ * Version 2.0.2
  *         | | +-- Avances
  *         | +---- Cambios al diseño
  *         +------ Cambios al protocolo
@@ -44,9 +44,7 @@ Handshake send;
  */
 static inline
 void send_handshake(const Handshake code) {
-  // Los bytes son mandados utilizando big endian
-  antena.write(code >> 8);
-  antena.write(code & 0xff);
+  antena.write((const char*) &code, sizeof(code));
 }
 
 /** get_handshake : uint16_t -> IO Handshake
@@ -84,27 +82,12 @@ Chunk read_sensors() {
   return encode({write, temp, pres, monox});
 }
 
-/** send_float : IO ()
- * Manda un float
- */
-static inline
-void send_float(const float x) {
-  antena.write((*(const int*)(&x) & 0xff000000) >> 24);
-  antena.write((*(const int*)(&x) & 0xff0000) >> 16);
-  antena.write((*(const int*)(&x) & 0xff00) >> 8);
-  antena.write(*(const int*)(&x) & 0xff);
-}
-
 /** send_chunk : IO ()
  * Manda un `Chunk`
  */
 static inline
 void send_chunk(const Chunk chunk) {
-  antena.write(chunk.time >> 8);
-  antena.write(chunk.time & 0xff);
-  send_float(chunk.temp);
-  send_float(chunk.pres);
-  send_float(chunk.monox);
+  antena.write((const char*) &chunk, sizeof(chunk));
 }
 
 void setup() {
