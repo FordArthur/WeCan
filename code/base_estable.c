@@ -1,7 +1,7 @@
 /** Solaris:
  * Descripción: Receptor/transmisor de la base
  * Autor: Marcos Ávila Navas
- * Version 2.0.3
+ * Version 2.1.0
  *         | | +-- Avances
  *         | +---- Cambios al diseño
  *         +------ Cambios al protocolo
@@ -114,8 +114,8 @@ int report(int src, int dst) {
     return 0;
 
   // Y lo imprimimos en stdout y dst
-  printf("%d,%f,%f,%f\n", chunk.time, chunk.temp, chunk.pres, chunk.monox);
-  return dprintf(dst, "%d,%f,%f,%f\n", chunk.time, chunk.temp, chunk.pres, chunk.monox);;
+  printf("%d,%f,%f,%f,%f\n", chunk.time, chunk.temp, chunk.pres, chunk.altur, chunk.monox);
+  return dprintf(dst, "%d,%f,%f,%f,%f\n", chunk.time, chunk.temp, chunk.pres, chunk.altur, chunk.monox);;
 }
 
 int main(int argc, char *argv[]) {
@@ -154,11 +154,8 @@ int main(int argc, char *argv[]) {
 
   write(file, HEADER, sizeof(HEADER));
 
-  while (1) if ((top = get_handshake(serial))) {
-    send_handshake(serial, recv);
-
-    while (recv < top && report(serial, file)) ++recv;
-    delay(1);
+  while (1) {
+    report(serial, file);
   }
   return 0;
 }
