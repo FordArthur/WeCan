@@ -15,13 +15,14 @@
 #include <SoftwareSerial.h>
 #include <MQ7.h>
 
+#define PIN_BUZZER 9
+
 SoftwareSerial antena(10, 11); // RX = 10, TX = 11
 MQ7 sensor_CO(A0, 5.0);        // Creamos el objeto sensor de CO
-static long timeout;           // Tiempo esperado en get_handshake
+static long time = 0;          // Tiempo
 
-#define TIMEOUT 100 // Timeout del handshake en ms
-#define MEM 16      // Memoria que reservamos para el buffer circular
-#define ERR -1      // -1 será nuestro símbolo error
+#define ALTURA_DATOS 0.0 // !! CUIDADO: Ajustar en el lanzamiento !!
+#define ALTURA_RECUP 0.0 // !! CUIDADO: Ajustar en el lanzamiento !!
 
 typedef struct Chunk {
   uint32_t time;
@@ -34,14 +35,15 @@ typedef struct Chunk {
 Adafruit_BMP280 bmp;
 
 /** read_sensors : IO Chunk
- * Lee los sensores y los empaqueta y códifica usando códigos de Hamming en un Chunk
+ * Lee los sensores y los empaqueta
  */
 static inline
 Chunk read_sensors(void) {
   const float temp = bmp.readTemperature();
   const float pres = bmp.readPressure();
+  const float altur = bmp.readAltitude();
   const float monox /* = sensor_CO.readPpm() */;
-  return{write, temp, pres, monox};
+  return {time++, temp, pres, altur, monox};
 }
 
 /** send_chunk : IO ()
@@ -53,11 +55,11 @@ void send_chunk(const Chunk chunk) {
 }
 
 void setup(void) {
-  pinMode(9, OUTPUT);
+  pinMode(PIN_BUZZER, OUTPUT);
   antena.begin(9600);
 
   while (!bmp.begin()) {
-    tone(9, 320, 100);
+    tone(PIN_BUZZER, 320, 100);
     delay(200);
   }
 
@@ -73,8 +75,14 @@ void setup(void) {
   sensor_CO.calibrate();
   delay(5000);
   */
+  while (bmp.readAltitude() < ALTURA_DATOS);
 }
 
 void loop(void) {
   send_chunk(read_sensors());
+
+  if (bmp.readAltitude() < ALTURA_RECUP)
+    tone(PIN_BUZZER, 340);
+    
+  delay(1000);
 }
