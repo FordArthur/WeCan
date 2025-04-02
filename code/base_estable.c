@@ -1,4 +1,4 @@
-/** Solaris:
+/** WeCan:
  * Descripción: Receptor/transmisor de la base
  * Autor: Marcos Ávila Navas
  * Version 2.1.0
@@ -9,13 +9,11 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <errno.h>
 #include <fcntl.h> 
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
-#include <time.h>
 #include <bits/floatn-common.h>
 
 #define HEADER "Tiempo (s),Temperatura (ºC),Presión (Pa),Altitud (m),Nivel de CO (ppm)\n"
@@ -77,31 +75,6 @@ int set_interface_attribs(int fd) {
   return 0;
 }
 
-static inline
-ssize_t send_handshake(int serial, uint32_t code) {
-  char hcode[sizeof(Chunk)];
-  mempcpy(hcode, &code, sizeof(code));
-  return write(serial, hcode, sizeof(hcode));
-}
-
-static inline
-uint32_t get_handshake(int serial) {
-  char hcode[sizeof(Chunk)];
-  ssize_t x;
-  if ((x = read(serial, hcode, sizeof(hcode))) < 0 && ((float*) hcode)[1] != __builtin_nanf32(""))
-    return 0;
-  return ((uint32_t*)hcode)[0];
-}
-
-/** delay : time_t -> void
- * delay espera `secs` segundos
- */
-static
-void delay(time_t secs) {
-  for (time_t future = time(NULL) + secs; time(NULL) < future;);
-}
-
-
 /** report : int, int -> int
  * report(src, dst) lee un Chunk de src, lo escribe en dst y en stdout, y devuelve el número
  * de carácteres impresos a dst
@@ -110,8 +83,13 @@ static
 int report(int src, int dst) {
   // Leemos un Chunk de src
   Chunk chunk;
-  if (read(src, &chunk, sizeof(Chunk)) < 0 || chunk.temp == __builtin_nanf32(""))
+  if (read(src, &chunk, sizeof(Chunk)) < 0)
     return 0;
+
+  if (chunk.temp == __builtin_nanf32("")) {
+    printf("Mdoo de recuperación activado\n");
+    return -1;
+  }
 
   // Y lo imprimimos en stdout y dst
   printf("%d,%f,%f,%f,%f\n", chunk.time, chunk.temp, chunk.pres, chunk.altur, chunk.monox);
@@ -141,11 +119,6 @@ int main(int argc, char *argv[]) {
   if (set_interface_attribs(serial) < 0)
     return 1;
 
-  // recv será cuantos datos hemos leídos
-  // top será cuantos datos ha procesado el satélite
-  uint32_t recv = 0
-         , top;
-
   printf(
     "\033c"
     "=== Programa de lectura WeCan ===\n\n"
@@ -154,8 +127,10 @@ int main(int argc, char *argv[]) {
 
   write(file, HEADER, sizeof(HEADER));
 
-  while (1) {
-    report(serial, file);
-  }
+  while (report(serial, file) != -1);
+
+  close(serial);
+  close(file);
+
   return 0;
-}
+;}

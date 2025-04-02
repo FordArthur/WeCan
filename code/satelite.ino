@@ -1,4 +1,4 @@
-/** Solaris:
+/** WeCan:
  * Descripción: Código satélite
  * Autor: Marcos Ávila Navas
  * Version 2.1.0

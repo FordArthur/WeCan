@@ -1,4 +1,4 @@
-/** Solaris:
+/** WeCan:
  * Descripción: Receptor/transmisor de la base
  * Autor: Marcos Ávila Navas
  * Version 2.0.3

@@ -1,4 +1,4 @@
-/** Solaris:
+/** WeCan:
  * Descripción: Código satélite
  * Autor: Marcos Ávila Navas
  * Version 2.1.0
@@ -21,8 +21,10 @@ SoftwareSerial antena(10, 11); // RX = 10, TX = 11
 MQ7 sensor_CO(A0, 5.0);        // Creamos el objeto sensor de CO
 static long time = 0;          // Tiempo
 
-#define ALTURA_DATOS 0.0 // !! CUIDADO: Ajustar en el lanzamiento !!
-#define ALTURA_RECUP 0.0 // !! CUIDADO: Ajustar en el lanzamiento !!
+float altura_suelo;
+
+#define ALTURA_DATOS 50.0
+#define ALTURA_RECUP 20.0
 
 typedef struct Chunk {
   uint32_t time;
@@ -42,8 +44,8 @@ Chunk read_sensors(void) {
   const float temp = bmp.readTemperature();
   const float pres = bmp.readPressure();
   const float altur = bmp.readAltitude();
-  const float monox /* = sensor_CO.readPpm() */;
-  return {time++, temp, pres, altur, monox};
+  const float monox = sensor_CO.readPpm();
+  return {time++, temp, pres, altur - altura_suelo, monox};
 }
 
 /** send_chunk : IO ()
@@ -52,6 +54,25 @@ Chunk read_sensors(void) {
 static inline
 void send_chunk(const Chunk chunk) {
   antena.write((const char*) &chunk, sizeof(chunk));
+}
+
+/** tono_recuperacion : IO ()
+ * Reproduce una melodía para la recuperación
+ */
+static inline
+void recuperation_tone(void) {
+  tone(PIN_BUZZER,587);
+  delay(500);
+  tone(PIN_BUZZER,659);
+  delay(500);
+  tone(PIN_BUZZER,523);
+  delay(500);
+  tone(PIN_BUZZER,261);
+  delay(500);
+  tone(PIN_BUZZER,392);
+  delay(800);
+  noTone(PIN_BUZZER);
+  delay(500);
 }
 
 void setup(void) {
@@ -71,18 +92,20 @@ void setup(void) {
     Adafruit_BMP280::STANDBY_MS_500
   );
 
-  /*
+  altura_suelo = bmp.readAltitude();
+
   sensor_CO.calibrate();
   delay(5000);
-  */
-  while (bmp.readAltitude() < ALTURA_DATOS);
+  while (bmp.readAltitude() - altura_suelo < ALTURA_DATOS);
 }
 
 void loop(void) {
   send_chunk(read_sensors());
 
-  if (bmp.readAltitude() < ALTURA_RECUP)
-    tone(PIN_BUZZER, 340);
+  if (bmp.readAltitude() - altura_suelo < ALTURA_RECUP)  {
+    send_chunk({NAN, NAN, NAN, NAN});
+    while (1) recuperation_tone();
+  }
     
   delay(1000);
 }
