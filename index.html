@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeSite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -17,7 +17,7 @@
           1: ["Mañana..."]
         };
         const youtubeURL = "https://www.youtube.com/watch?v=EUQE01YG06g";
-
+        
         let today;
 
         function updateCountdown() {
@@ -48,34 +48,10 @@
       });
     </script>
   </head>
-  <body class="bg-gray-900 text-white text-center px-2 py-4">
-    <div class="max-w-5xl mx-auto">
-      <h1 class="text-5xl font-extrabold mb-8">WeSite</h1>
-
-      <div class="mb-10">
-        <p id="countdown" class="text-6xl font-bold my-4"></p>
-        <p id="phrase" class="text-3xl italic"></p>
-
-        <div class="flex justify-center gap-4 flex-wrap">
-          <img src="images/cansat1.jpg" alt="Image 1" class="w-[300px] rounded-lg shadow-lg" />
-          <img src="images/cansat1.jpg" alt="Image 2" class="w-[300px] rounded-lg shadow-lg" />
-          <img src="images/cansat1.jpg" alt="Image 2" class="w-[300px] rounded-lg shadow-lg" />
-        </div>
-      </div>
-
-      <div class="space-y-8 text-left">
-        <div>
-          <h2 class="text-2xl font-semibold mb-2">Overview</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vel quam a erat fermentum sagittis.</p>
-        </div>
-        <div>
-          <h2 class="text-2xl font-semibold mb-2">Objetivos</h2>
-        </div>
-        <div>
-          <h2 class="text-2xl font-semibold mb-2">Team</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam commodo nunc sit amet augue hendrerit, vitae viverra sapien laoreet.</p>
-        </div>
-      </div>
+  <body class="flex items-center justify-center min-h-screen bg-gray-900 text-white text-center p-4">
+    <div>
+      <p id="countdown" class="text-6xl font-bold my-4"></p>
+      <p id="phrase" class="text-3xl italic"></p>
     </div>
   </body>
 </html>
