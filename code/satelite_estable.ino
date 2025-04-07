@@ -21,7 +21,8 @@ SoftwareSerial antena(10, 11); // RX = 10, TX = 11
 MQ7 sensor_CO(A0, 5.0);        // Creamos el objeto sensor de CO
 static long time = 0;          // Tiempo
 
-float altura_suelo;
+float floor_height;
+bool is_recovery = false;
 
 #define ALTURA_DATOS 50.0
 #define ALTURA_RECUP 20.0
@@ -45,7 +46,7 @@ Chunk read_sensors(void) {
   const float pres = bmp.readPressure();
   const float altur = bmp.readAltitude();
   const float monox = sensor_CO.readPpm();
-  return {time++, temp, pres, altur - altura_suelo, monox};
+  return {time++, temp, pres, altur - floor_height, monox};
 }
 
 /** send_chunk : IO ()
@@ -92,20 +93,20 @@ void setup(void) {
     Adafruit_BMP280::STANDBY_MS_500
   );
 
-  altura_suelo = bmp.readAltitude();
+  floor_height = bmp.readAltitude();
 
   sensor_CO.calibrate();
   delay(5000);
-  while (bmp.readAltitude() - altura_suelo < ALTURA_DATOS);
 }
 
 void loop(void) {
   send_chunk(read_sensors());
 
-  if (bmp.readAltitude() - altura_suelo < ALTURA_RECUP)  {
+  if (is_recovery && bmp.readAltitude() - floor_height < ALTURA_RECUP)  {
     send_chunk({NAN, NAN, NAN, NAN});
     while (1) recuperation_tone();
-  }
+  } else if (bmp.readAltitude() - floor_height  > ALTURA_DATOS)
+    is_recovery = true;
     
   delay(1000);
 }
